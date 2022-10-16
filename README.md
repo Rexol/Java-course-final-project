@@ -1,4 +1,4 @@
-# Bools and cows game.
+# Bolls and cows game.
 
 ## What is it
 
