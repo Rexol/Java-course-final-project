@@ -3,19 +3,25 @@ package com.example.bullsandcows.resources;
 import java.util.ArrayList;
 
 public class Game {
+    private final long id;
     private final Player player;
     private final String number;
     private final int wordSize;
     private ArrayList<HistoryEntry> guessHistory;
     private boolean active;
 
-    public Game(Player player, int wordSize) {
+    public Game(long l, Player player, int wordSize) {
+        this.id = l;
         this.player = player;
         this.wordSize = wordSize;
         this.number = Integer.toString((int) (Math.random() * Math.pow(10, wordSize)));
         this.guessHistory = new ArrayList<HistoryEntry>();
         this.active = true;
         this.player.incrementTotalGames();
+    }
+
+    public long getId() {
+        return this.id;
     }
 
     public Player getPlayer() {
@@ -79,8 +85,9 @@ public class Game {
         return res;
     }
 
-    public void giveUp() {
+    public String giveUp() {
         this.active = false;
+        return this.number;
     }
 
     private void checkAnswer(String guess) {

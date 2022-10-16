@@ -1,6 +1,8 @@
 package com.example.bullsandcows;
 
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,13 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.ArrayList;
-
 @RestController
 public class GameController {
     private HashMap<String, Player> users;
     private HashMap<String, Game> activeGames;
     private ArrayList<Game> playedGames;
+    private final AtomicLong counter = new AtomicLong();
 
     public GameController() {
         this.users = new HashMap<>();
@@ -69,7 +70,7 @@ public class GameController {
             this.playedGames.add(this.activeGames.get(name));
             this.activeGames.remove(name);
         }
-        this.activeGames.put(name, new Game(this.users.get(name), wordSize));
+        this.activeGames.put(name, new Game(counter.incrementAndGet(), this.users.get(name), wordSize));
 
         return true;
     }
@@ -92,15 +93,6 @@ public class GameController {
         return result;
     }
 
-    @PostMapping("/giveup")
-    public boolean giveUp(@RequestParam(value = "name") String name) throws ControllerException {
-        this.validateGame(name);
-
-        Game game = this.activeGames.get(name);
-        game.giveUp();
-        return true;
-    }
-
     @GetMapping("/player")
     public Player getPlayer(@RequestParam(value = "name") String name) throws ControllerException {
         this.validateUser(name);
@@ -121,6 +113,14 @@ public class GameController {
             throw new ControllerException("Player " + name + " hasn't played any game");
         }
         return !this.activeGames.get(name).isActive();
+    }
+
+    @PostMapping("/giveup")
+    public String giveUp(@RequestParam(value = "name") String name) throws ControllerException {
+        this.validateGame(name);
+
+        Game game = this.activeGames.get(name);
+        return "The answer was " + game.giveUp();
     }
 
     private void validateUser(String name) throws ControllerException {
