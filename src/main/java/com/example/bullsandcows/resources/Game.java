@@ -14,7 +14,8 @@ public class Game {
         this.id = l;
         this.player = player;
         this.wordSize = wordSize;
-        this.number = Integer.toString((int) (Math.random() * Math.pow(10, wordSize)));
+        int number = (int) (Math.random() * Math.pow(10, wordSize));
+        this.number = String.format("%0"+this.wordSize+"d", number);
         this.guessHistory = new ArrayList<HistoryEntry>();
         this.active = true;
         this.player.incrementTotalGames();
