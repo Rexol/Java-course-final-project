@@ -2,7 +2,7 @@
 
 ## What is it
 
-This application was implemented using spring boot as java cource final project. It is a pen-and-pencil game that you can play using http requests.
+This application was implemented using spring boot as java course final project. It is a pen-and-pencil game that you can play using http requests.
 
 ## Rules:
 
